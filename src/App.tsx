@@ -1,14 +1,19 @@
 import { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from '@/components/ui/sonner';
 import { AuthProvider, useAuth } from '@/lib/auth';
 import { AuthForm } from '@/components/auth/AuthForm';
 import { TopNavbar } from '@/components/layout/TopNavbar';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { BoardView } from '@/components/board/BoardView';
+import { Dashboard } from '@/pages/Dashboard';
+import { MyTasks } from '@/pages/MyTasks';
+import { CalendarView } from '@/pages/Calendar';
+import { Reports } from '@/pages/Reports';
 
 function AppContent() {
   const { user, isLoading } = useAuth();
-  const [selectedBoard, setSelectedBoard] = useState('board-1');
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   if (isLoading) {
     return (
@@ -26,18 +31,24 @@ function AppContent() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <TopNavbar />
-      <div className="flex h-[calc(100vh-4rem)]">
-        <Sidebar 
-          selectedBoard={selectedBoard}
-          onBoardSelect={setSelectedBoard}
-        />
-        <main className="flex-1 overflow-hidden">
-          <BoardView />
-        </main>
+    <Router>
+      <div className="min-h-screen bg-background">
+        <TopNavbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+        <div className="flex h-[calc(100vh-4rem)]">
+          <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+          <main className="flex-1 overflow-hidden">
+            <Routes>
+              <Route path="/" element={<Navigate to="/dashboard" replace />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/tasks" element={<MyTasks />} />
+              <Route path="/calendar" element={<CalendarView />} />
+              <Route path="/reports" element={<Reports />} />
+              <Route path="/board" element={<BoardView />} />
+            </Routes>
+          </main>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 

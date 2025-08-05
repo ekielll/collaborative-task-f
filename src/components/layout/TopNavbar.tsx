@@ -9,9 +9,14 @@ import { mockColumns } from '@/lib/mock-data';
 import { CreateTaskDialog } from '@/components/dialogs/CreateTaskDialog';
 import { Task } from '@/lib/types';
 import { Bell, Plus, Search, Settings } from '@phosphor-icons/react';
+import { List } from '@phosphor-icons/react';
 import { toast } from 'sonner';
 
-export function TopNavbar() {
+interface TopNavbarProps {
+  onMenuClick?: () => void;
+}
+
+export function TopNavbar({ onMenuClick }: TopNavbarProps) {
   const { user, logout } = useAuth();
   const [notifications] = useState(3);
   const [createTaskDialogOpen, setCreateTaskDialogOpen] = useState(false);
@@ -34,6 +39,16 @@ export function TopNavbar() {
   return (
     <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
       <div className="flex h-16 items-center px-6 gap-4">
+        {/* Mobile menu button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="lg:hidden"
+          onClick={onMenuClick}
+        >
+          <List size={20} />
+        </Button>
+        
         <div className="flex items-center gap-3">
           <h1 className="text-xl font-bold text-primary">TaskFlow</h1>
         </div>
