@@ -31,7 +31,7 @@ export const mockTags: Tag[] = [
   { id: 'tag-5', name: 'Design', color: '#F59E0B', workspaceId: 'workspace-1', workspace: {} as Workspace }
 ];
 
-// Mock tasks
+// Mock tasks with comprehensive due dates for calendar demonstration
 export const mockTasks: Task[] = [
   {
     id: 'task-1',
@@ -45,7 +45,7 @@ export const mockTasks: Task[] = [
     assignee: mockUsers[0],
     creatorId: 'user-2',
     creator: mockUsers[1],
-    dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000),
+    dueDate: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days from now
     tags: [mockTags[4], mockTags[3]],
     comments: [],
     position: 0,
@@ -64,7 +64,7 @@ export const mockTasks: Task[] = [
     assignee: mockUsers[1],
     creatorId: 'user-1',
     creator: mockUsers[0],
-    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000),
+    dueDate: new Date(Date.now() + 1 * 24 * 60 * 60 * 1000), // Tomorrow
     tags: [mockTags[2], mockTags[1]],
     comments: [],
     position: 0,
@@ -83,7 +83,7 @@ export const mockTasks: Task[] = [
     assignee: mockUsers[2],
     creatorId: 'user-1',
     creator: mockUsers[0],
-    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    dueDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week from now
     tags: [mockTags[1], mockTags[3]],
     comments: [],
     position: 1,
@@ -102,6 +102,7 @@ export const mockTasks: Task[] = [
     assignee: mockUsers[0],
     creatorId: 'user-3',
     creator: mockUsers[2],
+    dueDate: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000), // 2 days ago (completed)
     tags: [],
     comments: [],
     position: 0,
@@ -120,16 +121,149 @@ export const mockTasks: Task[] = [
     assignee: mockUsers[1],
     creatorId: 'user-2',
     creator: mockUsers[1],
-    dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+    dueDate: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days from now
     tags: [mockTags[1]],
     comments: [],
     position: 0,
     createdAt: new Date(),
     updatedAt: new Date()
+  },
+  {
+    id: 'task-6',
+    title: 'Weekly team standup meeting',
+    description: 'Discuss progress, blockers, and plan for the upcoming week',
+    priority: 'MEDIUM' as Priority,
+    status: 'To Do',
+    columnId: 'column-1',
+    column: {} as Column,
+    assigneeId: 'user-1',
+    assignee: mockUsers[0],
+    creatorId: 'user-1',
+    creator: mockUsers[0],
+    dueDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // Day after tomorrow
+    tags: [],
+    comments: [],
+    position: 2,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 'task-7',
+    title: 'Deploy security patches',
+    description: 'Apply critical security updates to production environment',
+    priority: 'URGENT' as Priority,
+    status: 'In Progress',
+    columnId: 'column-2',
+    column: {} as Column,
+    assigneeId: 'user-2',
+    assignee: mockUsers[1],
+    creatorId: 'user-1',
+    creator: mockUsers[0],
+    dueDate: new Date(), // Today
+    tags: [mockTags[2], mockTags[1]],
+    comments: [],
+    position: 1,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 'task-8',
+    title: 'Client presentation preparation',
+    description: 'Prepare slides and demo for the quarterly business review',
+    priority: 'HIGH' as Priority,
+    status: 'To Do',
+    columnId: 'column-1',
+    column: {} as Column,
+    assigneeId: 'user-3',
+    assignee: mockUsers[2],
+    creatorId: 'user-1',
+    creator: mockUsers[0],
+    dueDate: new Date(Date.now() + 6 * 24 * 60 * 60 * 1000), // 6 days from now
+    tags: [mockTags[4]],
+    comments: [],
+    position: 3,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 'task-9',
+    title: 'Code review for mobile app',
+    description: 'Review and approve mobile application pull requests',
+    priority: 'MEDIUM' as Priority,
+    status: 'Review',
+    columnId: 'column-3',
+    column: {} as Column,
+    assigneeId: 'user-1',
+    assignee: mockUsers[0],
+    creatorId: 'user-2',
+    creator: mockUsers[1],
+    dueDate: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000), // 4 days from now
+    tags: [mockTags[0], mockTags[3]],
+    comments: [],
+    position: 1,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 'task-10',
+    title: 'Server maintenance window',
+    description: 'Perform scheduled maintenance on production servers',
+    priority: 'LOW' as Priority,
+    status: 'To Do',
+    columnId: 'column-1',
+    column: {} as Column,
+    assigneeId: 'user-2',
+    assignee: mockUsers[1],
+    creatorId: 'user-3',
+    creator: mockUsers[2],
+    dueDate: new Date(Date.now() + 10 * 24 * 60 * 60 * 1000), // 10 days from now
+    tags: [mockTags[1]],
+    comments: [],
+    position: 4,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 'task-11',
+    title: 'OVERDUE: Fix payment gateway',
+    description: 'Critical bug in payment processing needs immediate attention',
+    priority: 'URGENT' as Priority,
+    status: 'To Do',
+    columnId: 'column-1',
+    column: {} as Column,
+    assigneeId: 'user-2',
+    assignee: mockUsers[1],
+    creatorId: 'user-1',
+    creator: mockUsers[0],
+    dueDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // Yesterday (overdue)
+    tags: [mockTags[2], mockTags[1]],
+    comments: [],
+    position: 5,
+    createdAt: new Date(),
+    updatedAt: new Date()
+  },
+  {
+    id: 'task-12',
+    title: 'Monthly performance review',
+    description: 'Review team performance metrics and set goals for next month',
+    priority: 'MEDIUM' as Priority,
+    status: 'Done',
+    columnId: 'column-4',
+    column: {} as Column,
+    assigneeId: 'user-1',
+    assignee: mockUsers[0],
+    creatorId: 'user-1',
+    creator: mockUsers[0],
+    dueDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago (completed)
+    tags: [],
+    comments: [],
+    position: 1,
+    createdAt: new Date(),
+    updatedAt: new Date()
   }
 ];
 
-// Mock columns
+// Mock columns - dynamically populated based on tasks
 export const mockColumns: Column[] = [
   {
     id: 'column-1',
@@ -137,7 +271,7 @@ export const mockColumns: Column[] = [
     position: 0,
     boardId: 'board-1',
     board: {} as Board,
-    tasks: mockTasks.filter(task => task.columnId === 'column-1'),
+    tasks: [], // Will be populated dynamically
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -147,7 +281,7 @@ export const mockColumns: Column[] = [
     position: 1,
     boardId: 'board-1',
     board: {} as Board,
-    tasks: mockTasks.filter(task => task.columnId === 'column-2'),
+    tasks: [], // Will be populated dynamically
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -157,7 +291,7 @@ export const mockColumns: Column[] = [
     position: 2,
     boardId: 'board-1',
     board: {} as Board,
-    tasks: mockTasks.filter(task => task.columnId === 'column-3'),
+    tasks: [], // Will be populated dynamically
     createdAt: new Date(),
     updatedAt: new Date()
   },
@@ -167,11 +301,16 @@ export const mockColumns: Column[] = [
     position: 3,
     boardId: 'board-1',
     board: {} as Board,
-    tasks: mockTasks.filter(task => task.columnId === 'column-4'),
+    tasks: [], // Will be populated dynamically
     createdAt: new Date(),
     updatedAt: new Date()
   }
 ];
+
+// Populate columns with their respective tasks
+mockColumns.forEach(column => {
+  column.tasks = mockTasks.filter(task => task.columnId === column.id);
+});
 
 // Mock board
 export const mockBoard: Board = {
