@@ -242,6 +242,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           </div>
         </div>
       </div>
+      </div>
     </>
   );
 }
