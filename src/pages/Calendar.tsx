@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -9,7 +10,8 @@ import {
   CaretLeft,
   CaretRight,
   Clock,
-  Flag
+  Flag,
+  Plus
 } from '@phosphor-icons/react';
 import { cn } from '@/lib/utils';
 
@@ -23,9 +25,18 @@ interface CalendarTask {
 }
 
 export function CalendarView() {
+  const navigate = useNavigate();
   const [tasks] = useKV('board-tasks', []);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
+
+  // Initialize with sample data if tasks are empty
+  useEffect(() => {
+    if (tasks.length === 0) {
+      // This will help users understand how the calendar works
+      console.log('No tasks found. Create some tasks with due dates to see them on the calendar.');
+    }
+  }, [tasks]);
 
   // Get tasks for the selected date
   const getTasksForDate = (date: Date) => {
@@ -67,12 +78,13 @@ export function CalendarView() {
 
   const TaskCard = ({ task }: { task: CalendarTask }) => {
     const isOverdue = new Date(task.dueDate) < new Date() && task.status !== 'Done';
+    const dueDate = new Date(task.dueDate);
     
     return (
       <Card className={cn(
-        "transition-all duration-200 hover:shadow-md border-l-4",
-        task.priority === 'High' ? "border-l-red-500" :
-        task.priority === 'Medium' ? "border-l-orange-500" : "border-l-green-500",
+        "transition-all duration-200 hover:shadow-md border-l-4 cursor-pointer",
+        task.priority === 'High' || task.priority === 'URGENT' ? "border-l-red-500" :
+        task.priority === 'Medium' || task.priority === 'MEDIUM' ? "border-l-orange-500" : "border-l-green-500",
         isOverdue && "bg-red-50 border border-red-200"
       )}>
         <CardContent className="p-3">
@@ -103,17 +115,22 @@ export function CalendarView() {
                 )}>
                   <Clock size={12} />
                   <span>
-                    {new Date(task.dueDate).toLocaleTimeString([], { 
+                    {dueDate.toLocaleTimeString([], { 
                       hour: '2-digit', 
                       minute: '2-digit' 
                     })}
                   </span>
                 </div>
+                {isOverdue && (
+                  <Badge variant="destructive" className="text-xs">
+                    OVERDUE
+                  </Badge>
+                )}
               </div>
               
               <Badge variant={
-                task.priority === 'High' ? 'destructive' :
-                task.priority === 'Medium' ? 'default' : 'secondary'
+                task.priority === 'High' || task.priority === 'URGENT' ? 'destructive' :
+                task.priority === 'Medium' || task.priority === 'MEDIUM' ? 'default' : 'secondary'
               } className="text-xs">
                 <Flag size={10} className="mr-1" />
                 {task.priority}
@@ -143,13 +160,22 @@ export function CalendarView() {
   const upcomingTasks = getUpcomingTasks();
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 h-full overflow-y-auto">
       {/* Header */}
       <div>
         <h1 className="text-3xl font-bold text-foreground">Calendar</h1>
         <p className="text-muted-foreground mt-1">
           View your tasks organized by due dates
         </p>
+        {tasks.length === 0 && (
+          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-800">
+              <strong>How to use the calendar:</strong> Create tasks with due dates in the Board view, 
+              and they'll automatically appear here. Tasks with due dates will be highlighted on the calendar 
+              and show up in the selected date panel.
+            </p>
+          </div>
+        )}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -239,7 +265,17 @@ export function CalendarView() {
               {selectedDateTasks.length === 0 ? (
                 <div className="text-center py-6 text-muted-foreground">
                   <CalendarBlank size={32} className="mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">No tasks for this date</p>
+                  <p className="text-sm mb-3">No tasks for this date</p>
+                  {tasks.length === 0 && (
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => navigate('/board')}
+                    >
+                      <Plus size={16} className="mr-2" />
+                      Create Tasks
+                    </Button>
+                  )}
                 </div>
               ) : (
                 <div className="space-y-3">

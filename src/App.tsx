@@ -36,7 +36,7 @@ function AppContent() {
         <TopNavbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
         <div className="flex h-[calc(100vh-4rem)]">
           <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-          <main className="flex-1 overflow-hidden">
+          <main className="flex-1 overflow-y-auto">
             <Routes>
               <Route path="/" element={<Navigate to="/dashboard" replace />} />
               <Route path="/dashboard" element={<Dashboard />} />

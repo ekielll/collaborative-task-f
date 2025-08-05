@@ -177,7 +177,7 @@ export function Reports() {
   const COLORS = ['#ef4444', '#f97316', '#22c55e'];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6 space-y-6 h-full overflow-y-auto">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
