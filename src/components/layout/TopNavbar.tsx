@@ -4,11 +4,32 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/lib/auth';
+import { useKV } from '@github/spark/hooks';
+import { mockColumns } from '@/lib/mock-data';
+import { CreateTaskDialog } from '@/components/dialogs/CreateTaskDialog';
+import { Task } from '@/lib/types';
 import { Bell, Plus, Search, Settings } from '@phosphor-icons/react';
+import { toast } from 'sonner';
 
 export function TopNavbar() {
   const { user, logout } = useAuth();
   const [notifications] = useState(3);
+  const [createTaskDialogOpen, setCreateTaskDialogOpen] = useState(false);
+  const [columns] = useKV('board-columns', mockColumns);
+  const [tasks, setTasks] = useKV('board-tasks', []);
+
+  const handleCreateTask = (taskData: Omit<Task, 'id' | 'createdAt' | 'updatedAt' | 'position'>) => {
+    const newTask: Task = {
+      ...taskData,
+      id: `task-${Date.now()}`,
+      position: tasks.filter(t => t.columnId === taskData.columnId).length,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    setTasks(currentTasks => [...currentTasks, newTask]);
+    toast.success('Task created successfully');
+  };
 
   return (
     <header className="border-b bg-card/50 backdrop-blur-sm sticky top-0 z-50">
@@ -29,7 +50,12 @@ export function TopNavbar() {
         </div>
 
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            className="gap-2"
+            onClick={() => setCreateTaskDialogOpen(true)}
+          >
             <Plus size={16} />
             New Task
           </Button>
@@ -76,6 +102,13 @@ export function TopNavbar() {
           </DropdownMenu>
         </div>
       </div>
+
+      <CreateTaskDialog
+        open={createTaskDialogOpen}
+        onClose={() => setCreateTaskDialogOpen(false)}
+        onCreateTask={handleCreateTask}
+        columns={columns}
+      />
     </header>
   );
 }
